@@ -37,3 +37,5 @@ Under the hood, the script creates a dotfile called `.file_renamer.csv` in the f
 - Add a feature to ignore some conventions. For example, if you don't want to change the case of the file name, you can use the `--ignore_case` flag.
 - Sometimes changing file names can corrupt the file. Need to add a feature `--safe` that will create a copy of the file (or the folder) and rename the copy. This will ensure that the original file is not corrupted.
 - Add a feature to rename files in the nested folders. Currently, it only renames files in the given folder (not in the sub-folders).
+- Add a feature to let user see the output without executing the renaming. This will be useful to see the changes before actually renaming the files. User can use the flag `--dry_run` to see the output without executing the renaming.
+- Add test cases and testing suite.
