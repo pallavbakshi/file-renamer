@@ -18,7 +18,12 @@ import click
     multiple=True,
     help="File path to ignore when renaming. You can give multiple file paths using --ignore <file_path> multiple times. Give complete file path.",
 )
-def rename_files(folder, file, revert, ignore):
+@click.option(
+    "--ignore_ext",
+    multiple=True,
+    help="File extensions to ignore when renaming. You can give multiple file extensions using --ignore_ext <file_extension> multiple times.",
+)
+def rename_files(folder, file, revert, ignore, ignore_ext):
     if revert:
         if folder:
             with open(os.path.join(folder, ".file_renamer.csv"), "r") as f:
@@ -46,7 +51,7 @@ def rename_files(folder, file, revert, ignore):
         with open(os.path.join(folder, ".file_renamer.csv"), "w") as f:
             writer = csv.writer(f)
             for filename in os.listdir(folder):
-                if is_file_to_be_ignored(filename, ignore):
+                if is_file_to_be_ignored(filename, ignore, ignore_ext):
                     continue
                 new_filename = apply_rename_conventions(filename)
                 writer.writerow([filename, new_filename])
@@ -73,9 +78,11 @@ def rename_files(folder, file, revert, ignore):
         click.echo("Please provide either a folder or a file to rename.")
 
 
-def is_file_to_be_ignored(filename: str, ignore: list) -> bool:
-    return filename.startswith(".") or any(
-        ignored_file == filename for ignored_file in ignore
+def is_file_to_be_ignored(filename: str, ignore: list, ignore_ext: str) -> bool:
+    return (
+        filename.startswith(".")
+        or any(ignored_file == filename for ignored_file in ignore)
+        or any(filename.endswith(ext) for ext in ignore_ext)
     )
 
 

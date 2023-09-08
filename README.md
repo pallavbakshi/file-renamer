@@ -21,6 +21,11 @@ This is a simple script that renames files in a folder. It can be used to rename
 - You can ignore files by using the `--ignore` flag.
     - `python file_renamer.py --folder <folder_path> --ignore <file_name>` 
 
+## How to ignore file extensions?
+- By default, all file extensions are considered.
+- You can ignore file extensions by using the `--ignore_ext` flag.
+    - `python file_renamer.py --folder <folder_path> --ignore_ext <file_extension>`
+
 ## How to revert the changes?
 Sometimes you don't like the renaming and want to revert the changes. You can do that by using the `--revert` flag. 
 
