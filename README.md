@@ -13,7 +13,7 @@ This is a simple script that renames files in a folder. It can be used to rename
 ## What are the conventions?
 - Replace all spaces with hyphen (-).
 - Lowercase all letters.
-- Remove all special characters except hyphen (-) and underscore (_).
+- Remove all special characters except dot (.) hyphen (-) and underscore (_).
 - Remove multiples (double/tripple) hypens (--).
 
 ## How to ignore files?
