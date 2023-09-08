@@ -30,3 +30,8 @@ This is a simple script that renames files in a folder. It can be used to rename
 Sometimes you don't like the renaming and want to revert the changes. You can do that by using the `--revert` flag. 
 
 Under the hood, the script creates a dotfile called `.file_renamer.csv` in the folder. This file contains the original file names and the renamed file names. When you use the `--revert` flag, the script reads this file and reverts the changes.
+
+## Future Plans
+- If user re-runs the script multiple times, revert loses the original file names. Need to fix this.
+- Add auto-renaming feature. This will automatically open the file and find a suitable name for the file based on the content of the file. This will use LLM (Language Model) to find the most suitable name for the file.
+- Add a feature to ignore some conventions. For example, if you don't want to change the case of the file name, you can use the `--ignore_case` flag.
