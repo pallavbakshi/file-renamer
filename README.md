@@ -35,3 +35,5 @@ Under the hood, the script creates a dotfile called `.file_renamer.csv` in the f
 - If user re-runs the script multiple times, revert loses the original file names. Need to fix this.
 - Add auto-renaming feature. This will automatically open the file and find a suitable name for the file based on the content of the file. This will use LLM (Language Model) to find the most suitable name for the file.
 - Add a feature to ignore some conventions. For example, if you don't want to change the case of the file name, you can use the `--ignore_case` flag.
+- Sometimes changing file names can corrupt the file. Need to add a feature `--safe` that will create a copy of the file (or the folder) and rename the copy. This will ensure that the original file is not corrupted.
+- Add a feature to rename files in the nested folders. Currently, it only renames files in the given folder (not in the sub-folders).
