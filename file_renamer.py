@@ -2,6 +2,9 @@ import os
 import re
 import csv
 import click
+import shutil
+
+from typing import Tuple
 
 
 @click.command()
@@ -23,7 +26,18 @@ import click
     multiple=True,
     help="File extensions to ignore when renaming. You can give multiple file extensions using --ignore_ext <file_extension> multiple times.",
 )
-def rename_files(folder, file, revert, ignore, ignore_ext):
+@click.option(
+    "--safe",
+    is_flag=True,
+    default=False,
+    help="Enable safe mode. This will create a copy of the file or folder before renaming.",
+)
+def rename_files(folder, file, revert, ignore, ignore_ext, safe):
+    validate_inputs(folder, file, revert, ignore, ignore_ext, safe)
+
+    if safe:
+        file, folder = give_safe_copy(file, folder)
+
     if revert:
         if folder:
             with open(os.path.join(folder, ".file_renamer.csv"), "r") as f:
@@ -51,6 +65,7 @@ def rename_files(folder, file, revert, ignore, ignore_ext):
         with open(os.path.join(folder, ".file_renamer.csv"), "w") as f:
             writer = csv.writer(f)
             for filename in os.listdir(folder):
+                # TODO: don't rename sub-folder
                 if is_file_to_be_ignored(filename, ignore, ignore_ext):
                     continue
                 new_filename = apply_rename_conventions(filename)
@@ -76,6 +91,30 @@ def rename_files(folder, file, revert, ignore, ignore_ext):
         os.rename(file, os.path.join(os.path.dirname(file), new_filename))
     else:
         click.echo("Please provide either a folder or a file to rename.")
+
+
+def validate_inputs(folder, file, revert, ignore, ignore_ext, safe):
+    if not folder and not file:
+        raise ValueError("Please provide either a folder or a file to rename.")
+    if folder and file:
+        raise ValueError(
+            "Cannot use both --folder and --file flags at the same time."
+        )
+    # TODO: How will revert work with copy? Should we delete the copy?
+    if revert and safe:
+        raise ValueError(
+            "Cannot use both --revert and --safe flags at the same time."
+        )
+    # TODO: How can we validate ignore and ignore_ext?
+
+
+def give_safe_copy(file: str, folder: str) -> Tuple[str, str]:
+    if file:
+        shutil.copy2(file, file + "_copy")
+    if folder:
+        shutil.copytree(folder, folder + "_copy")
+        folder = folder + "_copy"
+    return file, folder
 
 
 def is_file_to_be_ignored(filename: str, ignore: list, ignore_ext: str) -> bool:
